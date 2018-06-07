@@ -29,22 +29,22 @@ public class RegisterFrame extends JFrame implements ActionListener {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        JLabel bId = new JLabel("아이디 : ");
+        JLabel bId = new JLabel("아이디 ");
         tfId = new JTextField(20);
         gbAdd(bId, 0, 0, 1, 1);
         gbAdd(tfId, 1, 0, 3, 1);
 
-        JLabel bPwd = new JLabel("비밀번호 : ");
+        JLabel bPwd = new JLabel("비밀번호 ");
         pfPwd = new JPasswordField(20);
         gbAdd(bPwd, 0, 1, 1, 1);
         gbAdd(pfPwd, 1, 1, 3, 1);
 
-        JLabel bName = new JLabel("별명 :");
+        JLabel bName = new JLabel("별명");
         tfName = new JTextField(20);
         gbAdd(bName, 0, 2, 1, 1);
         gbAdd(tfName, 1, 2, 3, 1);
 
-        JLabel bInterest = new JLabel("관심사 :");
+        JLabel bInterest = new JLabel("관심사");
         tfInterest = new JTextField(20);
         gbAdd(bInterest, 0, 3, 1, 1);
         gbAdd(tfInterest, 1, 3, 3, 1);
@@ -95,10 +95,10 @@ public class RegisterFrame extends JFrame implements ActionListener {
         boolean ok = databaseConnect.insertUser(userData);
 
         if (ok) {
-            JOptionPane.showMessageDialog(this, "회원가입에 성공했습니다.");
+            JOptionPane.showMessageDialog(this, "회원가입 성공");
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "회원가입에 실패했습니다.");
+            JOptionPane.showMessageDialog(this, "회원가입 실패");
         }
     }
 

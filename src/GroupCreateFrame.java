@@ -86,13 +86,13 @@ public class GroupCreateFrame extends JFrame implements ActionListener {
             boolean ok = databaseConnect.insertGroup(groupData);
 
             if (ok) {
-                JOptionPane.showMessageDialog(this, "회원가입에 성공했습니다.");
+                JOptionPane.showMessageDialog(this, "모임 생성!");
                 new MainFrame(id);
             } else {
-                JOptionPane.showMessageDialog(this, "회원가입에 실패했습니다.");
+                JOptionPane.showMessageDialog(this, "모임 생성 실패");
             }
         } else
-            JOptionPane.showMessageDialog(this, "회원가입에 실패했습니다.");
+            JOptionPane.showMessageDialog(this, "모임 생성 실패");
     }
 
     public GroupData getViewData() {
