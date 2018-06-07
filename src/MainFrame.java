@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -22,6 +24,7 @@ public class MainFrame extends JFrame implements ActionListener {
         group_col.add("모임장");
 
         DefaultTableModel model = new DefaultTableModel(databaseConnect.getGroupList(), group_col) {
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -32,6 +35,18 @@ public class MainFrame extends JFrame implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(group_table);
         add(scrollPane);
         scrollPane.setBounds(0, 0, 400, 400);
+
+        group_table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String gName = (String)model.getValueAt(group_table.getSelectedRow(), 0);
+               // System.out.println("방 이름: " + model.getValueAt(group_table.getSelectedRow(), 0));
+                new InGroupFrame(gName, id);
+                MainFrame.this.dispose();
+
+            }
+        });
+
 
         createButton = new JButton("모임생성");
         createButton.setBounds(450, 10, 100, 30);

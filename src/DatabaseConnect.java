@@ -52,7 +52,41 @@ public class DatabaseConnect {
 
         return pw;
     }
+    public Vector getBoardList(String gname) {
+        Vector data = new Vector();
 
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConn();
+            String sql = "select * from tbl_board where gnumber = (select gnumber from tbl_group where name='" + gname + "')";
+            System.out.println(sql);
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                int gnumber = rs.getInt("gnumber");
+                String name = rs.getString("name");
+                String content = rs.getString("content");
+                int id = rs.getInt("id");
+                Object bfile = rs.getObject("bfile");
+
+                Vector row = new Vector();
+                row.add(gnumber);
+                row.add(name);
+                row.add(content);
+                row.add(id);
+                row.add(bfile);
+
+                data.add(row);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
     public Vector getGroupList() {
         Vector data = new Vector();
 

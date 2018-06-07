@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GroupCreateFrame extends JFrame implements ActionListener {
+public class BoardCreateFrame extends JFrame implements ActionListener {
     private String id;
 
     JTextField tfInterest, tfName;
@@ -13,8 +13,8 @@ public class GroupCreateFrame extends JFrame implements ActionListener {
     GridBagLayout gb;
     GridBagConstraints gbc;
 
-    public GroupCreateFrame(String id) {
-        super("모임생성");
+    public BoardCreateFrame(String id) {
+        super("게시판생성");
         this.id = id;
 
         gb = new GridBagLayout();
@@ -69,7 +69,7 @@ public class GroupCreateFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnInsert) {
-            insertGroup();
+            insertBoard();
             this.dispose();
         } else if(e.getSource() == btnCancel) {
             new MainFrame(id);
@@ -78,7 +78,7 @@ public class GroupCreateFrame extends JFrame implements ActionListener {
     }
 
 
-    private void insertGroup() {
+    private void insertBoard() {
         GroupData groupData = getViewData();
 
         if(groupData.getGnumber() != -1) {
