@@ -10,7 +10,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/파일/ojdbc14.jar!/" />
+          <root url="jar://F:/sqldeveloper-17.4.1.054.0712-x64/sqldeveloper/jdbc/lib/ojdbc8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
