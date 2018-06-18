@@ -5,16 +5,19 @@ import java.awt.event.ActionListener;
 
 public class BoardCreateFrame extends JFrame implements ActionListener {
     private String id;
+    private int gnum;
 
-    JTextField tfInterest, tfName;
+    JTextField tfContent, tfName;
     JTextArea taIntro;
     JButton btnInsert, btnCancel;
 
     GridBagLayout gb;
     GridBagConstraints gbc;
 
-    public BoardCreateFrame(String id) {
+    public BoardCreateFrame(int gunmb, String id) {
         super("게시판생성");
+        this.gnum = gunmb;
+
         this.id = id;
 
         gb = new GridBagLayout();
@@ -24,23 +27,20 @@ public class BoardCreateFrame extends JFrame implements ActionListener {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        JLabel bName = new JLabel("모임 이름 :");
-        tfName = new JTextField(20);
+        JLabel bName = new JLabel("제목 :");
+        tfName = new JTextField(10);
         gbAdd(bName, 0, 0, 1, 1);
         gbAdd(tfName, 1, 0, 3, 1);
 
-        JLabel bInterest = new JLabel("모임 관심사 : ");
-        tfInterest = new JTextField(20);
-        gbAdd(bInterest, 0, 1, 1, 1);
-        gbAdd(tfInterest, 1, 1, 3, 1);
 
-        JLabel bIntro = new JLabel("모임 소개 :");
-        taIntro = new JTextArea(5, 20);
-        gbAdd(bIntro, 0, 2, 1, 1);
-        gbAdd(taIntro, 1, 2, 3, 1);
+
+        JLabel bContent = new JLabel("내용 :");
+        tfContent = new JTextField( 30);
+        gbAdd(bContent, 0, 2, 1, 1);
+        gbAdd(tfContent, 1, 2, 3, 1);
 
         JPanel pButton = new JPanel();
-        btnInsert = new JButton("모임생성");
+        btnInsert = new JButton("게시판 작성");
         btnCancel = new JButton("뒤로가기");
 
         pButton.add(btnInsert);
@@ -72,45 +72,43 @@ public class BoardCreateFrame extends JFrame implements ActionListener {
             insertBoard();
             this.dispose();
         } else if(e.getSource() == btnCancel) {
-            new MainFrame(id);
+            new InGroupFrame(gnum, id);
             this.dispose();
         }
     }
 
 
     private void insertBoard() {
-        GroupData groupData = getViewData();
-
-        if(groupData.getGnumber() != -1) {
+        //GroupData groupData = getViewData();
+        BoardData boardData = getViewData();
+        if(boardData.getGnumber() != -1) {
             DatabaseConnect databaseConnect = new DatabaseConnect();
-            boolean ok = databaseConnect.insertGroup(groupData);
+            boolean ok = databaseConnect.insertBoard(boardData);
 
             if (ok) {
-                JOptionPane.showMessageDialog(this, "모임 생성에 성공했습니다.");
-                new MainFrame(id);
+                JOptionPane.showMessageDialog(this, "개시판 작성에 성공했습니다.");
+                new InGroupFrame(gnum, id);
             } else {
-                JOptionPane.showMessageDialog(this, "모임 생성에 실패했습니다.");
+                JOptionPane.showMessageDialog(this, "게시판 작성에 실패했습니다.");
             }
         } else
-            JOptionPane.showMessageDialog(this, "모임 생성에 실패했습니다.");
+            JOptionPane.showMessageDialog(this, "게시판 작성에 실패했습니다.");
     }
 
-    public GroupData getViewData() {
+    public BoardData getViewData() {
         DatabaseConnect databaseConnect = new DatabaseConnect();
-        GroupData groupData = new GroupData();
+        BoardData boardData = new BoardData();
 
-        int gnumber = databaseConnect.getGroupCount();
+        int gnumber = gnum;
         String name = tfName.getText();
-        String interest = tfInterest.getText();
-        String intro = taIntro.getText();
-        String master = id;
+       // String interest = tfInterest.getText();
+        String content = tfContent.getText();
+        String uid = id;
 
-        groupData.setGnumber(gnumber);
-        groupData.setName(name);
-        groupData.setInterest(interest);
-        groupData.setMaster(master);
-        groupData.setIntro(intro);
-
-        return groupData;
+        boardData.setGnumber(gnumber);
+        boardData.setName(name);
+        boardData.setContent(content);
+        boardData.setId(uid);
+        return boardData;
     }
 }

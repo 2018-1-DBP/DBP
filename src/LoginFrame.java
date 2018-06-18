@@ -11,7 +11,8 @@ public class LoginFrame extends JFrame implements ActionListener {
     JPanel loginPanel, buttonPanel;
     JButton registerButton, loginButton;
     JLabel titleLabel, idLabel, pwLabel;
-    JTextField idText, pwText;
+    JTextField idText;
+    JPasswordField pwText;
 
     public static void main(String[] args) {
         new LoginFrame();
@@ -25,21 +26,24 @@ public class LoginFrame extends JFrame implements ActionListener {
         loginPanel.setBounds(200, 120, 200, 160);
 
         idLabel = new JLabel("아이디");
-        pwLabel = new JLabel("비밀번호");
+        idLabel.setBounds(190, 100, 80, 40);
         idText = new JTextField(10);
-        pwText = new JTextField(10);
+        idText.setBounds(
+                260, 100, 150, 40);
 
-        loginPanel.add(idLabel);
-        loginPanel.add(idText);
-        loginPanel.add(pwLabel);
-        loginPanel.add(pwText);
+        pwLabel = new JLabel("비밀번호");
+        pwLabel.setBounds(190, 150, 80, 40);
+        pwText = new JPasswordField(10);
+        pwText.setBounds(260, 150, 150, 40);
 
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.setBounds(200, 280, 200, 120);
+        buttonPanel.setBounds(195, 220, 210, 120);
 
         registerButton = new JButton("회원가입");
+        registerButton.setPreferredSize(new Dimension(100, 30));
         loginButton = new JButton("로그인");
+        loginButton.setPreferredSize(new Dimension(100, 30));
 
         registerButton.addActionListener(this);
         loginButton.addActionListener(this);
@@ -47,6 +51,10 @@ public class LoginFrame extends JFrame implements ActionListener {
         buttonPanel.add(registerButton);
         buttonPanel.add(loginButton);
 
+        add(idLabel);
+        add(idText);
+        add(pwLabel);
+        add(pwText);
         add(loginPanel);
         add(buttonPanel);
         setSize(600,400);

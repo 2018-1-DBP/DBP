@@ -52,7 +52,37 @@ public class DatabaseConnect {
 
         return pw;
     }
-    public Vector getBoardList(String gname) {
+
+    public GroupData getGroup(int gnumber) {
+        GroupData groupData = new GroupData();
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConn();
+            String sql = "select * from tbl_group where gnumber = ?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, gnumber);
+            rs = ps.executeQuery();
+
+            rs.next();
+
+            groupData.setGnumber(rs.getInt("gnumber"));
+            groupData.setName(rs.getString("name"));
+            groupData.setInterest(rs.getString("interest"));
+            groupData.setMaster(rs.getString("master"));
+            groupData.setIntro(rs.getString("intro"));
+
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return groupData;
+    }
+
+    public Vector getBoardList(int gnum) {
         Vector data = new Vector();
 
         Connection con = null;
@@ -61,24 +91,23 @@ public class DatabaseConnect {
 
         try {
             con = getConn();
-            String sql = "select * from tbl_board where gnumber = (select gnumber from tbl_group where name='" + gname + "')";
-            System.out.println(sql);
+            String sql = "select * from tbl_board where gnumber = " + gnum;
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while(rs.next()) {
-                int gnumber = rs.getInt("gnumber");
+                //int gnumber = rs.getInt("gnumber");
                 String name = rs.getString("name");
                 String content = rs.getString("content");
-                int id = rs.getInt("id");
-                Object bfile = rs.getObject("bfile");
+                String id = rs.getString("id");
+                //Object bfile = rs.getObject("bfile");
 
                 Vector row = new Vector();
-                row.add(gnumber);
+               // row.add(gnumber);
                 row.add(name);
                 row.add(content);
                 row.add(id);
-                row.add(bfile);
+              //  row.add(bfile);
 
                 data.add(row);
             }
@@ -101,13 +130,14 @@ public class DatabaseConnect {
             rs = ps.executeQuery();
 
             while(rs.next()) {
-                int gumber = rs.getInt("gnumber");
+                int gnumber = rs.getInt("gnumber");
                 String name = rs.getString("name");
                 String interest = rs.getString("interest");
                 String master = rs.getString("master");
                 String intro = rs.getString("intro");
 
                 Vector row = new Vector();
+                row.add(gnumber);
                 row.add(name);
                 row.add(interest);
                 row.add(master);
@@ -184,10 +214,94 @@ public class DatabaseConnect {
         }catch(SQLException e) {
             e.printStackTrace();
         }
+        if((ok == true) && joinGroup(groupData.getGnumber(), groupData.getMaster()))
+            ok = true;
+        else
+            ok = false;
 
         return ok;
     }
 
+    public boolean joinGroup(int gnumber, String id) {
+        boolean ok = false;
+
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = getConn();
+
+            String sql = "INSERT INTO tbl_group_member(gnumber,id) VALUES(?,?)";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, gnumber);
+            ps.setString(2, id);
+
+            int r = ps.executeUpdate();
+
+            if(r>0) {
+                ok = true;
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ok;
+    }
+
+    public boolean checkGroupMember(int gnumber, String id) {
+        String check = null;
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConn();
+            String sql = "SELECT id FROM tbl_group_member WHERE gnumber=? AND id=?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, gnumber);
+            ps.setString(2, id);
+
+            rs = ps.executeQuery();
+
+            if(rs.next()) {
+                check = rs.getString("id");
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        if(check == null)  return false;
+        else return true;
+    }
+
+    public int countGroupMember(int gnumber) {
+        int count = -1;
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConn();
+
+            String sql = "SELECT count(*) as member_count FROM tbl_group_member WHERE gnumber=?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, gnumber);
+            rs = ps.executeQuery();
+
+            rs.next();
+
+            count = rs.getInt("member_count");
+            System.out.println(count);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return count;
+    }
     /**
      * 만들어진 모임의 개수를 세어주는 함수
      * 모임의 개수는 모임 번호를 입력하는데 사용
@@ -241,4 +355,38 @@ public class DatabaseConnect {
         }
         return ok;
     }
+
+    public boolean insertBoard(BoardData groupData) {
+        boolean ok = false;
+
+        Connection con = null;
+        PreparedStatement ps = null;
+
+       System.out.println(groupData.getGnumber() + "/" + groupData.getName() + "/" + groupData.getContent() + "/" + groupData.getId());
+        try {
+            con = getConn();
+
+            String sql = "INSERT INTO tbl_board VALUES(?,?,?,?)";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, groupData.getGnumber());
+            ps.setString(2, groupData.getName());
+            ps.setString(3, groupData.getContent());
+            ps.setString(4, groupData.getId());
+
+            int r = ps.executeUpdate();
+
+            if(r>0) {
+                ok = true;
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+        /*if((ok == true) && joinGroup(groupData.getGnumber(), groupData.getMaster()))
+            ok = true;
+        else
+            ok = false;*/
+
+        return ok;
+    }
+
 }

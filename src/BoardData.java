@@ -1,9 +1,9 @@
 public class BoardData {
     private int gnumber;
     private String name;
-    private String interest;
-    private String master;
-    private String intro;
+    private String content;
+    private String id;
+
 
     public int getGnumber() {
         return gnumber;
@@ -21,27 +21,19 @@ public class BoardData {
         this.name = name;
     }
 
-    public String getInterest() {
-        return interest;
+    public String getContent() {
+        return content;
     }
 
-    public void setInterest(String interest) {
-        this.interest = interest;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getIntro() {
-        return intro;
+    public String getId() {
+        return id;
     }
 
-    public void setIntro(String intro) {
-        this.intro = intro;
-    }
-
-    public String getMaster() {
-        return master;
-    }
-
-    public void setMaster(String master) {
-        this.master = master;
+    public void setId(String id) {
+        this.id = id;
     }
 }
