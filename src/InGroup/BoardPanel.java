@@ -11,7 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 
-public class BoardPanel extends JPanel {
+public class
+BoardPanel extends JPanel {
 
     private String id;
     private Vector board_col;
