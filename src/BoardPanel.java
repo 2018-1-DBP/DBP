@@ -3,7 +3,6 @@ package InGroup;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +19,6 @@ BoardPanel extends JPanel {
 
     private JButton createBoard;
     private JButton backBtn;
-
 
     private BoardPanel panel;
 

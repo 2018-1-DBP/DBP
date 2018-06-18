@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.*;
 import java.util.Vector;
 
@@ -388,5 +389,101 @@ public class DatabaseConnect {
 
         return ok;
     }
+    public String getMaster(int gnumber) {
+        String whoMaster = null;
+        Vector datas = new Vector();
+        Connection conn = null;
+        PreparedStatement pss = null;
+        ResultSet rss = null;
 
+        try {
+            conn = getConn();
+            String sqls = "select master from tbl_group where gnumber=" + gnumber;
+            pss= conn.prepareStatement(sqls);
+            rss = pss.executeQuery();
+
+            while(rss.next()) {
+                String master = rss.getString("master");
+                whoMaster = master;
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+
+        return whoMaster;
+    }
+
+    public Vector getGroupMember(int gnumber) {
+        String whoMaster = null;
+        Vector datas = new Vector();
+        Connection conn = null;
+        PreparedStatement pss = null;
+        ResultSet rss = null;
+
+        try {
+            conn = getConn();
+            String sqls = "select master from tbl_group where gnumber=" + gnumber;
+            pss= conn.prepareStatement(sqls);
+            rss = pss.executeQuery();
+
+            while(rss.next()) {
+                String master = rss.getString("master");
+               /* Vector rows = new Vector();
+                rows.add(master);
+                datas.add(rows);*/
+               whoMaster = master;
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+
+
+        Vector data = new Vector();
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConn();
+            String sql = "select id from tbl_group_member where gnumber=" + gnumber;
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while(rs.next()) {
+                String id = rs.getString("id");
+                Vector row = new Vector();
+                row.add(id);
+                if(id.equals(whoMaster)) {
+                    row.add("방장");
+                } else { row.add("회원"); }
+                data.add(row);
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+
+    }
+    public boolean deleteUser(int gnum, String id) {
+        boolean ok = false;
+
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = getConn();
+
+            String sql = "DELETE FROM TBL_GROUP_MEMBER WHERE gnumber=? AND id=?";
+
+
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, gnum);
+            ps.setString(2, id);
+            int r = ps.executeUpdate();
+
+            if(r>0) {
+                ok = true;
+            }
+        }catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return ok;
+    }
 }
